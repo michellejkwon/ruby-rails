@@ -23,10 +23,10 @@ def monte_carlo(num_samples = 1000)
     # Then, increment hits by the number of times (x, y) is within the circle
     # x^2 + y^2 = 1
     # *********** YOUR CODE BEGINS HERE *********** #
-    x = rng.rand
-    y = rng.rand
+    x = (rng.rand * 2) - 1
+    y = (rng.rand * 2) - 1
     if x**2 + y**2 <= 1
-      hits += 1;
+      hits += 1
     end
     # *********** YOUR CODE ENDS HERE *********** #
   end
@@ -52,7 +52,7 @@ def roboticize(string)
   # This should get you familiar with strings, iterators, and blocks
 
   # *********** YOUR CODE HERE *********** #
-  string.split.each { |word| word.capitalize! }.join(" ")
+  string.split.each { |word| word.capitalize!}.join(". ")
 end
 
 
@@ -104,7 +104,7 @@ def scrabble(word)
     z: 10,
   }
   # *********** YOUR CODE HERE *********** #
-  word.split("").map! { |chr| (values[chr.to_sym]) ? values[chr.to_sym] : chr } #.reduce(0, :+)
+  word.split("").map! { |chr| (values[chr.to_sym]) ? values[chr.to_sym] : chr }.reduce(0, :+)
 end
 
 
@@ -122,8 +122,22 @@ def rhyming()
   words.map! { |word| word.strip }  # map! is the destructive version of map
   words.select! { |word| word.length > 5 }
 
-  # *********** YOUR CODE HERE *********** #
-  nil
+  words.select! { |word| word.end_with?("range")}
+  suffix_hash = {:arange => [], :erange => [], :irange => [], :orange => [], :urange => []}
+  words.each do |word|
+    if word.end_with?("arange")
+      suffix_hash[:arange].push(word)
+    elsif word.end_with?("erange")
+      suffix_hash[:erange].push(word)
+    elsif word.end_with?("irange")
+      suffix_hash[:irange].push(word)
+    elsif word.end_with?("orange")
+      suffix_hash[:orange].push(word)
+    elsif word.end_with?("urange")
+      suffix_hash[:urange].push(word)
+    end
+  end
+  suffix_hash
 end
 
 
@@ -168,7 +182,7 @@ class Currency
     # objects are represented in CENTS. See Dollar for more detail.
     yen_in_dollar = 113.32
     # *********** 3. YOUR CODE BEGINS HERE *********** #
-    nil
+    self.value <=> other.value
     # *********** 3. YOUR CODE ENDS HERE *********** #
   end
 
@@ -204,7 +218,9 @@ class Yen < Currency
   # Your Yen object should print out in the following format: "Yen: ¥3000".
   # Feel free to implement more methods in this class later for your own convenience.
   # *********** 1. YOUR CODE BEGINS HERE *********** #
-
+  def to_s
+    "Yen: ¥#{value}"
+  end
   # *********** 1. YOUR CODE ENDS HERE *********** #
 end
 
@@ -221,7 +237,7 @@ class String
       $1 ? Dollar.new(value) : Dollar.new(value * 100)
     elsif self =~ /^¥[\d,]+$/  # Matches yen money format (no decimal)
       # *********** 2. YOUR CODE BEGINS HERE *********** #
-      nil
+      Yen.new(value)
       # *********** 2. YOUR CODE ENDS HERE *********** #
     else
       raise TypeError.new("Cannot convert #{self} to currency.")
